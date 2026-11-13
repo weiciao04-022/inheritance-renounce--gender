@@ -161,3 +161,23 @@ svg.unit { width: 100%; max-width: 260px; height: auto; display: block; }
 .house-panel { display: grid; gap: 10px; position: sticky; top: 12px; }
 .houses svg { max-width: 300px; }
 .linkbtn { font: inherit; font-size: 14px; justify-self: start; background: none; border: 1px solid var(--ink); border-radius: 999px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+
+.twmap .map-num { font-family: var(--mono); font-weight: 600; font-size: 13px; fill: var(--ink); pointer-events: none; }
+.twmap .map-num.inv { fill: #fff; }
+.twmap .leader { stroke: var(--ink-3); stroke-width: 1; }
+
+.pick { border: 1.5px solid var(--ink); border-radius: 8px; padding: 12px 14px; background: var(--surface); display: grid; gap: 2px; }
+.pick-name { font-weight: 700; font-size: 18px; }
+.pick-name small { font-weight: 500; font-size: 13px; color: var(--ink-3); margin-left: 4px; }
+.pick-big { font-family: var(--mono); font-weight: 700; font-size: 40px; line-height: 1.15; }
+.pick-big small { font-size: 18px; font-weight: 500; color: var(--ink-2); }
+.pick-sub { font-size: 13px; color: var(--ink-3); }
+.pick-n { font-family: var(--mono); font-size: 15px; margin-top: 6px; line-height: 1.7; }
+.ttable { max-height: 420px; overflow: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--card); }
+.ttable table { font-size: 13px; }
+.ttable th { position: sticky; top: 0; background: var(--surface-2); }
+.ttable tbody tr { cursor: pointer; }
+.ttable tbody tr:hover, .ttable tbody tr:focus-visible { background: var(--surface); outline: none; }
+.ttable tbody tr.on { background: var(--ink); }
+.ttable tbody tr.on td { color: var(--card); }
+.ttable tfoot td { border-top: 1.5px solid var(--ink); font-weight: 600; }

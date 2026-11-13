@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<title>社群圖卡（產生用）</title>
+<style>
+  :root { --surface:#f6f3ec; --surface-2:#ece8de; --card:#fffdf8; --ink:#1d2126; --ink-2:#4f5054; --ink-3:#75767a; --rule:#d9d3c4;
+    --grid: rgba(120,105,75,.07); --f:#b8431a; --m:#2e6aa6; --hl:#b8431a;
+    --mono:"IBM Plex Mono", ui-monospace, monospace; --body:"Noto Sans TC","PingFang TC",sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ccc; font-family: var(--body); color: var(--ink); }
+  .ig { width: 1080px; height: 1350px; position: relative; overflow: hidden; background-color: var(--surface);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px; padding: 80px; display: flex; flex-direction: column; gap: 36px; }
+  .top { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 24px; color: var(--ink-3); letter-spacing: .08em; }
+  .title-slot { border: 3px dashed var(--hl); border-radius: 14px; padding: 22px 26px; color: var(--hl); font-size: 40px; font-weight: 800; line-height: 1.3; }
+  .title-slot small { display: block; font-size: 22px; font-weight: 500; color: var(--ink-3); margin-top: 6px; }
+  .box { background: var(--card); border: 3px solid var(--ink); border-radius: 18px; box-shadow: 12px 12px 0 rgba(29,33,38,.12); padding: 36px; flex: 1; display: flex; flex-direction: column; gap: 22px; }
+  .lab { font-size: 30px; font-weight: 700; }
+  .sub { font-size: 24px; color: var(--ink-2); }
+  .src { font-size: 21px; color: var(--ink-2); line-height: 1.6; }
+  .legend { display: flex; gap: 30px; font-size: 26px; color: var(--ink-2); }
+  .legend i { width: 22px; height: 22px; border-radius: 50%; display: inline-block; margin-right: 8px; vertical-align: -3px; }
+  .num { font-family: var(--mono); font-weight: 600; }
+  .f { color: var(--f); } .m { color: var(--m); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; flex: 1; }
+  .pair > div { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  .big { font-family: var(--mono); font-weight: 700; font-size: 46px; }
+  svg text { font-family: var(--body); }
+  .u-f { fill: var(--f); } .u-m { fill: var(--m); }
+  .rate-m .inh { fill: var(--m); } .rate-f .inh { fill: var(--f); }
+  .ren { fill: var(--card); stroke: var(--ink); stroke-width: 2.5; }
+  .none { fill: var(--surface-2); stroke: #b3ac9c; stroke-width: 1.2; stroke-dasharray: 3 3; }
+  .cty { stroke: var(--card); stroke-width: 1.2; }
+  .b0 { fill: var(--f); } .b1 { fill: #c9dbee; } .b2 { fill: #8fb3db; } .b3 { fill: #4f86c0; } .b4 { fill: #1f4f80; }
+  .map-num { font-family: var(--mono); font-weight: 700; font-size: 15px; fill: var(--ink); }
+  .map-num.inv { fill: #fff; }
+  .inset { fill: none; stroke: #b3ac9c; stroke-dasharray: 4 4; }
+  .leader { stroke: var(--ink-3); stroke-width: 1; }
+  .cover { justify-content: center; }
+  .cover .box { flex: 0; align-items: center; text-align: center; padding: 70px 50px; }
+  .cover-title { margin: 0; white-space: nowrap; font-size: 62px; font-weight: 900; line-height: 1.25; letter-spacing: .01em; }
+  .foot { text-align: center; font-size: 24px; color: var(--ink-3); }
+  .draft { position: absolute; top: 24px; right: 24px; font-family: var(--mono); font-size: 18px; color: #fff; background: var(--hl); border-radius: 6px; padding: 4px 10px; }
+  ul { margin: 0; padding-left: 1.2em; font-size: 26px; line-height: 1.65; display: grid; gap: 10px; }
+</style>
+</head>
+<body>
+<div id="card"></div>
+<script src="../data/processed/renounce.js"></script>
+<script src="../data/processed/extra.js"></script>
+<script src="../data/processed/land114.js"></script>
+<script src="../data/processed/map.js"></script>
+<script>
+const R = window.RENOUNCE, E = window.EXTRA, L = window.LAND114, MAP = window.TW_MAP;
+const fmt = n => n.toLocaleString('zh-TW');
+const n = Number(new URLSearchParams(location.search).get('card') || 1);
+const NS = 'http://www.w3.org/2000/svg';
+const TITLE = '房子到底都傳男還是傳女？ 臺灣不動產繼承現況';
+const T = (k) => `<div class="title-slot">標題待作者撰寫<small>（${k}）</small></div>`;
+const topBar = (i, tag) => `<div class="top"><span>${tag}</span><span>0${i} / 06</span></div>`;
+
+function gridSVG(cells, shape, size = 400) {
+  const S = size / 10; let i = 0, out = '';
+  cells.forEach(c => { for (let k = 0; k < c.n; k++, i++) {
+    const x = (i % 10) * S + S / 2, y = Math.floor(i / 10) * S + S / 2, r = S * .36;
+    out += shape === 'house'
+      ? `<path class="${c.cls}" d="M${x - r},${y + r}V${y - r * .1}L${x},${y - r * 1.1}L${x + r},${y - r * .1}V${y + r}Z"/>`
+      : `<circle class="${c.cls}" cx="${x}" cy="${y}" r="${r}"/>`;
+  }});
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${out}</svg>`;
+}
+
+function lineSVG() {
+  const W = 840, H = 560, M = { t: 50, r: 90, b: 50, l: 60 }, iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const step = iw / R.length, cx = i => M.l + i * step + step / 2, y = v => M.t + ih - (v - 50) / 50 * ih;
+  let g = '';
+  [50, 60, 70, 80, 90].forEach(t => g += `<line x1="${M.l}" x2="${M.l + iw}" y1="${y(t)}" y2="${y(t)}" stroke="#d9d3c4"/><text x="${M.l - 10}" y="${y(t) + 7}" text-anchor="end" font-size="20" fill="#75767a">${t}</text>`);
+  g += `<line x1="${M.l}" x2="${M.l + iw}" y1="${y(100)}" y2="${y(100)}" stroke="#1d2126" stroke-width="2" stroke-dasharray="7 5"/><text x="${M.l - 10}" y="${y(100) + 7}" text-anchor="end" font-size="20" fill="#75767a">100</text>`;
+  g += `<text x="${M.l + iw + 8}" y="${y(100) + 7}" font-size="20" fill="#75767a">男女相同</text>`;
+  R.forEach((r, i) => { if (i % 3 === 0 || i === R.length - 1) g += `<text x="${cx(i)}" y="${H - 14}" text-anchor="middle" font-size="20" fill="#75767a">${r.year}</text>`; });
+  g += `<path d="${R.map((r, i) => (i ? 'L' : 'M') + cx(i) + ',' + y(r.ratio)).join('')}" fill="none" stroke="#b8431a" stroke-width="4" stroke-linejoin="round"/>`;
+  R.forEach((r, i) => g += `<circle cx="${cx(i)}" cy="${y(r.ratio)}" r="6" fill="#b8431a" stroke="#fffdf8" stroke-width="2.5"/>`);
+  const a = R[0], b = R[R.length - 1];
+  g += `<text x="${cx(0)}" y="${y(a.ratio) + 40}" font-size="28" font-weight="700" font-family="IBM Plex Mono,monospace" fill="#1d2126">${a.ratio.toFixed(1)}</text>`;
+  g += `<text x="${cx(R.length - 1) + 12}" y="${y(b.ratio) + 9}" font-size="28" font-weight="700" font-family="IBM Plex Mono,monospace" fill="#1d2126">${b.ratio.toFixed(1)}</text>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+
+function mapSVG() {
+  const by = Object.fromEntries(L.counties.map(c => [c.county, c]));
+  const bin = r => r < 100 ? 'b0' : r < 120 ? 'b1' : r < 150 ? 'b2' : r < 180 ? 'b3' : 'b4';
+  const callout = { '臺北市': [372, 132, 'end'], '基隆市': [462, 150, 'end'], '新竹市': [262, 214, 'end'], '嘉義市': [212, 446, 'end'] };
+  let g = '';
+  MAP.counties.filter(c => c.inset).forEach(c => { const [[x0, y0], [x1, y1]] = c.inset; g += `<rect class="inset" x="${x0 - 4}" y="${y0 - 4}" width="${x1 - x0 + 8}" height="${y1 - y0 + 8}"/>`; });
+  MAP.counties.forEach(c => g += `<path class="cty ${bin(by[c.name].ratio)}" d="${c.d}"/>`);
+  MAP.counties.forEach(c => {
+    const d = by[c.name], v = Math.round(d.ratio), inv = d.ratio >= 150;
+    if (c.inset) { g += `<text class="map-num" x="${c.inset[0][0]}" y="${c.inset[0][1] + 8}">${c.name.slice(0, 2)} ${v}</text>`; return; }
+    if (callout[c.name]) { const [tx, ty, an] = callout[c.name]; g += `<line class="leader" x1="${c.cx}" y1="${c.cy}" x2="${tx}" y2="${ty + 2}"/><text class="map-num" x="${tx}" y="${ty - 2}" text-anchor="${an}">${c.name.slice(0, 2)} ${v}</text>`; return; }
+    g += `<text class="map-num${inv ? ' inv' : ''}" x="${c.cx}" y="${c.cy + 5}" text-anchor="middle">${v}</text>`;
+  });
+  return `<svg width="470" height="800" viewBox="0 0 ${MAP.w} ${MAP.h}" style="height:640px;width:auto">${g}</svg>`;
+}
+
+const legend = `<div class="legend"><span><i style="background:var(--f)"></i>女性</span><span><i style="background:var(--m)"></i>男性</span></div>`;
+const cards = {
+  1: () => `<div class="ig cover"><span class="draft">草稿</span>${topBar(1, '繼承 × 性別')}
+      <div class="box"><h1 class="cover-title">${TITLE.split(" ").join("<br>")}</h1><p class="sub" style="font-size:30px">導言待作者撰寫</p>${legend}</div>
+      <p class="foot">黃暐喬｜往右滑 →</p></div>`,
+  2: () => { const a = R[0], b = R[R.length - 1]; return `<div class="ig"><span class="draft">草稿</span>${topBar(2, '拋棄繼承')}${T('拋棄繼承男女比')}
+      <div class="box"><p class="lab">拋棄繼承的人，男 : 女 = x : 100</p><p class="sub">每 100 位拋棄繼承的女性，對應幾位男性（${a.year}–${b.year}）</p>${lineSVG()}</div>
+      <p class="src">資料：財政部《性別統計年報》國人遺產拋棄繼承人數－按性別分（105、108、114 年版）。拋棄繼承人含配偶、兄弟姊妹等所有繼承人；拋棄也可能是為了避開債務。縱軸從 50 開始。</p></div>`; },
+  3: () => { const P = E.per100; const one = (t, d) => `<div><p class="lab">${t}</p>${gridSVG([{ n: d.female, cls: 'u-f' }, { n: d.male, cls: 'u-m' }], 'house', 380)}<p class="big"><span class="f">女 ${d.female}</span>　<span class="m">男 ${d.male}</span></p></div>`;
+    return `<div class="ig"><span class="draft">草稿</span>${topBar(3, '贈與與拋棄')}${T('每 100 人')}
+      <div class="box">${legend}<div class="pair">${one('收到贈與的 100 人', P.gift)}${one('拋棄繼承的 100 人', P.renounce)}</div></div>
+      <p class="src">資料：財政部《114 年性別統計年報》表 2-23、2-25，${P.year} 年。受贈人含子女以外的親屬；點數依女性占比四捨五入。</p></div>`; },
+  4: () => { const d = E.changhua.find(r => r.year === 2023);
+    const cells = p => { const i = Math.round(p.inherit / p.eligible * 100), r = Math.round(p.renounce / p.eligible * 100); return [{ n: i, cls: 'inh' }, { n: r, cls: 'ren' }, { n: 100 - i - r, cls: 'none' }]; };
+    const one = (t, p, sx) => `<div class="rate-${sx}"><p class="lab">每 100 個有資格繼承的${t}</p>${gridSVG(cells(p), 'dot', 380)}<p class="big ${sx}">${p.rate}%</p><p class="sub">實際拿到不動產</p></div>`;
+    return `<div class="ig"><span class="draft">草稿</span>${topBar(4, '應得與實得')}${T('應得與實得')}
+      <div class="box"><div class="legend"><span><i style="background:var(--ink)"></i>實際繼承</span><span><i style="background:var(--card);border:3px solid var(--ink)"></i>拋棄繼承</span><span><i style="background:var(--surface-2);border:2px dashed #b3ac9c"></i>沒拋棄也沒繼承</span></div>
+      <div class="pair">${one('兒子', d.son, 'm')}${one('女兒', d.daughter, 'f')}</div></div>
+      <p class="src">資料：彰化縣地政處〈彰化縣近 5 年不動產繼承之性別差異分析〉，${d.year} 年。比率＝實際繼承不動產人數 ÷ 該性別應繼承人數（兒子 ${fmt(d.son.eligible)} 人、女兒 ${fmt(d.daughter.eligible)} 人）。</p></div>`; },
+  5: () => `<div class="ig"><span class="draft">草稿</span>${topBar(5, '土地')}${T('土地地主男女比')}
+      <div class="box" style="flex-direction:row;align-items:center;gap:30px">${mapSVG()}
+        <div style="display:flex;flex-direction:column;gap:18px"><p class="sub">每 100 位女性地主，<br>對應幾位男性地主</p>
+        <p class="big" style="font-size:40px">全台 ${L.national.ratio.toFixed(1)}</p>
+        <div class="legend" style="flex-direction:column;gap:10px;font-size:22px">
+          <span><i style="background:var(--f);border-radius:4px"></i>低於 100</span><span><i style="background:#c9dbee;border-radius:4px"></i>100–119</span>
+          <span><i style="background:#8fb3db;border-radius:4px"></i>120–149</span><span><i style="background:#4f86c0;border-radius:4px"></i>150–179</span>
+          <span><i style="background:#1f4f80;border-radius:4px"></i>180 以上</span></div></div></div>
+      <p class="src">資料：內政部「私有土地所有權人性別統計」，至 2025 年底，只計人數；經行政院性別平等會重要性別統計資料庫。地圖：taiwan-atlas（內政部國土測繪中心）。</p></div>`,
+  6: () => `<div class="ig"><span class="draft">草稿</span>${topBar(6, '資料說明')}${T('結尾／資料說明')}
+      <div class="box"><p class="lab">這些數字看得到、也看不到的</p><ul>
+        <li>拋棄繼承是放棄<b>全部</b>遺產，不分房子或存款；也可能是為了避開債務。</li>
+        <li>拋棄繼承人包含配偶、兄弟姊妹等，不只是女兒。</li>
+        <li>簽分割協議讓出份額的人，不會出現在拋棄繼承統計裡。</li>
+        <li>「實際繼承比率」目前只有彰化、臺中等少數縣市公布，各縣市口徑不同。</li>
+        <li>地主男女比只算人數，不算面積或價值。</li></ul></div>
+      <p class="src">完整資料、計算方式與待查證事項：GitHub inheritance-renounce--gender／notes</p></div>`,
+};
+document.getElementById('card').innerHTML = cards[n]();
+</script>
+</body>
+</html>

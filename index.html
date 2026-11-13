@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>（標題待作者撰寫）｜小數點</title>
+<title>房子到底都傳男還是傳女？ 臺灣不動產繼承現況｜小數點</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
   <div class="hero-card">
     <span class="draft">草稿／待作者撰寫文字</span>
     <p class="kicker">小數點 DECIMAL POINT ／ 繼承 × 性別</p>
-    <h1>（標題待作者撰寫）<span class="todo">待作者撰寫</span></h1>
+    <h1>房子到底都傳男還是傳女？<br>臺灣不動產繼承現況</h1>
     <p class="dek placeholder">導言待作者撰寫。</p>
     <p class="byline">文字：黃暐喬　資料整理與圖表原型：待確認署名方式<span class="todo">待作者撰寫</span></p>
   </div>
@@ -86,57 +86,33 @@
 
   <section class="chapter" aria-labelledby="h-map">
     <p class="stage">05 ／ 地圖</p>
-    <h2 id="h-map" class="chart-title">點一個縣市：每 100 位因繼承取得土地的人，男女各幾位（105 年）</h2>
+    <h2 id="h-map" class="chart-title"><span id="map-title"></span></h2>
+    <div class="tabs" id="map-ds" role="group" aria-label="切換資料">
+      <button type="button" data-ds="land" aria-pressed="true">土地所有權人（2025 年底）</button>
+      <button type="button" data-ds="inherit" aria-pressed="false">因繼承取得土地（105 年）</button>
+    </div>
     <div class="legend" id="map-legend" aria-hidden="true"></div>
     <figure>
       <div class="map-wrap">
         <div id="map" class="map"></div>
         <div class="house-panel">
-          <div id="houses" class="houses"></div>
-          <p class="readout" id="house-cap"></p>
-          <div class="legend" aria-hidden="true">
-            <span><i class="sw" style="background:var(--f)"></i>女性</span>
-            <span><i class="sw" style="background:var(--m)"></i>男性</span>
-          </div>
+          <div class="pick" id="pick"></div>
           <button type="button" class="linkbtn" id="map-reset" hidden>回到全國</button>
+          <div class="ttable"><table id="map-table"><caption class="visually-hidden">各縣市男女人數與男女比</caption></table></div>
         </div>
       </div>
-      <figcaption class="source">地圖色階為男女比（男 : 女 = x : 100）。資料來源：內政部 105 年「全國地籍資料優質化統計分析資訊系統」，轉引自新北市政府地政局〈不動產繼承之性別差異改善方案〉表一；只含土地，不含建物。縣市界線：taiwan-atlas（內政部國土測繪中心）。<span class="todo">待取得內政部原表</span></figcaption>
+      <figcaption class="source">地圖色階與數字為男女比（男 : 女 = x : 100）。<span id="map-source"></span></figcaption>
     </figure>
   </section>
 
-  <section class="chapter" aria-labelledby="h-county">
-    <p class="stage">06 ／ 各縣市排名</p>
-    <div class="placeholder">段落待作者撰寫。</div>
-    <h2 id="h-county" class="chart-title">因繼承取得土地的人，各縣市男女比（105 年，男 : 女 = x : 100）</h2>
-    <p class="chart-sub">每 100 位因繼承取得土地的女性，對應幾位男性。超過 100 代表取得的男性比較多。虛線分別是男女相同（100）和全國（136.8）。</p>
-    <div class="tabs" id="county-sort" role="group" aria-label="排序方式">
-      <button type="button" data-sort="desc" aria-pressed="true">由高到低</button>
-      <button type="button" data-sort="region" aria-pressed="false">依地區（北中南東離島）</button>
-    </div>
-    <div class="legend" aria-hidden="true">
-      <span><i class="sw" style="background:var(--m)"></i>男性較多（超過 100）</span>
-      <span><i class="sw" style="background:var(--f)"></i>女性較多（低於 100）</span>
-    </div>
-    <figure>
-      <div class="chart" id="county-chart"></div>
-      <p class="readout" id="county-readout">點選或用上下方向鍵選一個縣市，查看人數。</p>
-      <figcaption class="source">
-        資料來源：內政部 105 年「全國地籍資料優質化統計分析資訊系統」，轉引自新北市政府地政局〈不動產繼承之性別差異改善方案〉表一。
-        範圍：因分割繼承、遺贈、遺囑繼承、一般繼承取得土地權屬者，只含土地、不含建物。男女比＝男性人數 ÷ 女性人數 × 100。
-        <span class="todo">待取得內政部原表</span>
-      </figcaption>
-    </figure>
-    <div class="placeholder">段落待作者撰寫。</div>
-  </section>
 
 </main>
 
 <footer class="foot">
   <h2>資料限制</h2>
   <ul class="limits">
-    <li>各縣市圖只有 105 年一年，而且是「取得土地的人」，沒有「有資格繼承的人」當分母；不能解讀成「各縣市女兒實際繼承的比率」。</li>
-    <li>各縣市圖轉引自新北市地政局報告，尚未取得內政部原表；22 縣市加總與全國相符，男女比重算與原表一致。<span class="todo">待查證</span></li>
+    <li>地圖「因繼承取得土地」只有 105 年一年，而且是「取得土地的人」，沒有「有資格繼承的人」當分母；不能解讀成「各縣市女兒實際繼承的比率」。</li>
+    <li>地圖「因繼承取得土地」轉引自新北市地政局報告，尚未取得內政部原表；22 縣市加總與全國相符，男女比重算與原表一致。<span class="todo">待查證</span></li>
     <li>拋棄繼承是向法院放棄<strong>全部</strong>遺產，統計不分不動產、存款或債務；被繼承人負債大於資產時也可能拋棄。</li>
     <li>未經法院、以遺產分割協議讓出份額的情況，不會出現在這份統計裡。</li>
     <li>拋棄繼承人包含所有繼承人身分（配偶、子女、父母、兄弟姊妹等），表中只分性別，不分是不是女兒。</li>
@@ -149,7 +125,7 @@
 <script src="data/processed/renounce.js"></script>
 <script src="js/chart.js"></script>
 <script src="data/processed/county105.js"></script>
-<script src="js/county.js"></script>
+<script src="data/processed/land114.js"></script>
 <script src="data/processed/extra.js"></script>
 <script src="data/processed/map.js"></script>
 <script src="js/cards.js"></script>
