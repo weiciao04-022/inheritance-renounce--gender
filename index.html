@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>（標題待作者撰寫）｜小數點</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<header class="hero">
+  <div class="hero-card">
+    <span class="draft">草稿／待作者撰寫文字</span>
+    <p class="kicker">小數點 DECIMAL POINT ／ 繼承 × 性別</p>
+    <h1>（標題待作者撰寫）<span class="todo">待作者撰寫</span></h1>
+    <p class="dek placeholder">導言待作者撰寫。</p>
+    <p class="byline">文字：黃暐喬　資料整理與圖表原型：待確認署名方式<span class="todo">待作者撰寫</span></p>
+  </div>
+</header>
+
+<main class="col">
+
+  <section class="chapter" aria-labelledby="h-key">
+    <p class="stage">01 ／ 關鍵數字</p>
+    <h2 id="h-key" class="visually-hidden">關鍵數字</h2>
+    <div class="tiles" id="tiles"></div>
+    <p class="source">男女比＝男性人數 ÷ 女性人數 × 100。「拋棄繼承人」包含配偶、子女、父母、兄弟姊妹等所有向法院拋棄繼承的人，不只是女兒。</p>
+  </section>
+
+  <section class="chapter" aria-labelledby="h-main">
+    <p class="stage">02 ／ 主圖</p>
+    <div class="placeholder">段落待作者撰寫。</div>
+    <h2 id="h-main" class="chart-title">拋棄繼承的人，男女比（男 : 女 = x : 100）</h2>
+    <p class="chart-sub">每 100 位向法院拋棄繼承的女性，對應幾位男性。虛線 100 代表男女人數相同；線越接近 100，差距越小。縱軸從 50 開始。</p>
+
+    <figure>
+      <div class="chart" id="chart">
+        <div class="tip" id="tip" role="status" aria-live="polite"></div>
+      </div>
+      <p class="readout" id="readout">點選或用方向鍵移動到任一年，查看人數。</p>
+      <figcaption class="source">
+        資料來源：財政部統計處《性別統計年報》國人遺產拋棄繼承人數－按性別分（114 年版表 2-23；108 年版、105 年版表 2-11）。
+        原表說明：依被繼承人遺產稅稅籍資料與共繼人資料，按被繼承人死亡時間統計。
+        2008–2010 年取自 105 年版，2011–2016 年取自 108 年版，2017–2025 年取自 114 年版。
+      </figcaption>
+    </figure>
+
+    <details>
+      <summary>看資料表</summary>
+      <div class="table-wrap"><table id="table"><caption class="visually-hidden">歷年拋棄繼承人數，按性別分</caption></table></div>
+    </details>
+
+    <div class="placeholder">段落待作者撰寫。</div>
+  </section>
+
+  <section class="chapter" aria-labelledby="h-unit">
+    <p class="stage">03 ／ 每 100 人</p>
+    <h2 id="h-unit" class="chart-title">每 100 位拋棄繼承的人、每 100 位收到贈與的人，男女各幾位（2025 年）</h2>
+    <div class="legend" aria-hidden="true">
+      <span><i class="sw" style="background:var(--f)"></i>女性</span>
+      <span><i class="sw" style="background:var(--m)"></i>男性</span>
+    </div>
+    <figure>
+      <div class="unit-row" id="unit-cards"></div>
+      <figcaption class="source">資料來源：財政部統計處《114 年性別統計年報》表 2-23 國人遺產拋棄繼承人數－按性別分、表 2-25 國人贈與受贈人數－按性別分。受贈人數依贈與稅申辦時間統計，不含非本國人及非自然人。點數依女性占比四捨五入，男性＝100－女性。</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" aria-labelledby="h-rate">
+    <p class="stage">04 ／ 應得與實得</p>
+    <h2 id="h-rate" class="chart-title">有資格繼承的兒子和女兒，多少人實際拿到不動產</h2>
+    <div class="ctrl">
+      <div class="tabs" id="rate-place" role="group" aria-label="選擇縣市">
+        <button type="button" data-place="changhua" aria-pressed="true">彰化縣</button>
+        <button type="button" data-place="taichung" aria-pressed="false">臺中市（2023）</button>
+      </div>
+      <label class="sel">年份 <select id="rate-year" aria-label="彰化縣年份"></select></label>
+    </div>
+    <div class="legend" id="rate-legend" aria-hidden="true"></div>
+    <figure>
+      <div class="unit-row" id="rate-grids"></div>
+      <figcaption class="source" id="rate-source"></figcaption>
+    </figure>
+    <p class="source">兩縣市的分母都是「該性別有資格繼承的人數」，但認定方式由各地政機關自訂，不宜直接比較兩縣市高低。彰化 2019 年原表「總計」與男女分項加總不一致（24,963 vs 25,682），本圖以分項計算。<span class="todo">待查證</span></p>
+  </section>
+
+  <section class="chapter" aria-labelledby="h-map">
+    <p class="stage">05 ／ 地圖</p>
+    <h2 id="h-map" class="chart-title">點一個縣市：每 100 位因繼承取得土地的人，男女各幾位（105 年）</h2>
+    <div class="legend" id="map-legend" aria-hidden="true"></div>
+    <figure>
+      <div class="map-wrap">
+        <div id="map" class="map"></div>
+        <div class="house-panel">
+          <div id="houses" class="houses"></div>
+          <p class="readout" id="house-cap"></p>
+          <div class="legend" aria-hidden="true">
+            <span><i class="sw" style="background:var(--f)"></i>女性</span>
+            <span><i class="sw" style="background:var(--m)"></i>男性</span>
+          </div>
+          <button type="button" class="linkbtn" id="map-reset" hidden>回到全國</button>
+        </div>
+      </div>
+      <figcaption class="source">地圖色階為男女比（男 : 女 = x : 100）。資料來源：內政部 105 年「全國地籍資料優質化統計分析資訊系統」，轉引自新北市政府地政局〈不動產繼承之性別差異改善方案〉表一；只含土地，不含建物。縣市界線：taiwan-atlas（內政部國土測繪中心）。<span class="todo">待取得內政部原表</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" aria-labelledby="h-county">
+    <p class="stage">06 ／ 各縣市排名</p>
+    <div class="placeholder">段落待作者撰寫。</div>
+    <h2 id="h-county" class="chart-title">因繼承取得土地的人，各縣市男女比（105 年，男 : 女 = x : 100）</h2>
+    <p class="chart-sub">每 100 位因繼承取得土地的女性，對應幾位男性。超過 100 代表取得的男性比較多。虛線分別是男女相同（100）和全國（136.8）。</p>
+    <div class="tabs" id="county-sort" role="group" aria-label="排序方式">
+      <button type="button" data-sort="desc" aria-pressed="true">由高到低</button>
+      <button type="button" data-sort="region" aria-pressed="false">依地區（北中南東離島）</button>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><i class="sw" style="background:var(--m)"></i>男性較多（超過 100）</span>
+      <span><i class="sw" style="background:var(--f)"></i>女性較多（低於 100）</span>
+    </div>
+    <figure>
+      <div class="chart" id="county-chart"></div>
+      <p class="readout" id="county-readout">點選或用上下方向鍵選一個縣市，查看人數。</p>
+      <figcaption class="source">
+        資料來源：內政部 105 年「全國地籍資料優質化統計分析資訊系統」，轉引自新北市政府地政局〈不動產繼承之性別差異改善方案〉表一。
+        範圍：因分割繼承、遺贈、遺囑繼承、一般繼承取得土地權屬者，只含土地、不含建物。男女比＝男性人數 ÷ 女性人數 × 100。
+        <span class="todo">待取得內政部原表</span>
+      </figcaption>
+    </figure>
+    <div class="placeholder">段落待作者撰寫。</div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <h2>資料限制</h2>
+  <ul class="limits">
+    <li>各縣市圖只有 105 年一年，而且是「取得土地的人」，沒有「有資格繼承的人」當分母；不能解讀成「各縣市女兒實際繼承的比率」。</li>
+    <li>各縣市圖轉引自新北市地政局報告，尚未取得內政部原表；22 縣市加總與全國相符，男女比重算與原表一致。<span class="todo">待查證</span></li>
+    <li>拋棄繼承是向法院放棄<strong>全部</strong>遺產，統計不分不動產、存款或債務；被繼承人負債大於資產時也可能拋棄。</li>
+    <li>未經法院、以遺產分割協議讓出份額的情況，不會出現在這份統計裡。</li>
+    <li>拋棄繼承人包含所有繼承人身分（配偶、子女、父母、兄弟姊妹等），表中只分性別，不分是不是女兒。</li>
+    <li>財政部會隨共繼人資料補登修訂人數：同一年度在不同版本年報的人數最多差 737 人（2016 年），女性占比不變。</li>
+    <li>2019 年起人數明顯增加（2018 年 5.6 萬 → 2022 年 8.8 萬），原因待向財政部統計處查證。<span class="todo">待查證</span></li>
+  </ul>
+  <p class="source">資料與程式：<a href="https://github.com/weiciao04-022/inheritance-renounce--gender">GitHub</a>。重現方式：<code>node analysis/build.js</code>。</p>
+</footer>
+
+<script src="data/processed/renounce.js"></script>
+<script src="js/chart.js"></script>
+<script src="data/processed/county105.js"></script>
+<script src="js/county.js"></script>
+<script src="data/processed/extra.js"></script>
+<script src="data/processed/map.js"></script>
+<script src="js/cards.js"></script>
+</body>
+</html>
